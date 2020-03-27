@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Application #{{ object.short_id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Application #{{ object.short_id }}</h2>
+  <p>Details about the certificate application object {{ object.pk }} for the {{ object.org }}.</p>
+  <p>Viewing as {{ object.access_type }}</p>
+  <div class="row">
+    <div class="col-sm">
+      <fieldset><legend>Application details</legend>
+        <table class="table table-bordered">
+          <tr>
+            <th>Status</th>
+            <td>
+              {{ object.get_status_display }}
+              {% if object.required_documents_uploaded %}
+                {% if object.status == object.STATUS_PENDING and object.access_type == 'staff' %}
+                  <br/>
+                  <a href="{% url 'certificates:application-approve' object.id %}" class="btn btn-primary btn-sm">Approve or reject</a>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+          {% if object.status == object.STATUS_REJECTED %}
+            <tr>
+              <th>Rejection details</th>
+              <td>{{ object.reject_reason }}<br/>{{ object.reject_comment|linebreaksbr }}</td>
+            </tr>
+          {% endif %}
+          <tr>
+            <th>Sent by</th>
+            <td>{{ object.created_by }}</td>
+          </tr>
+          <tr>
+            <th>Sent at</th>
+            <td>{{ object.created_at }}</td>
+          </tr>
+          <tr>
+            <th>For org</th>
+            <td>{{ object.org }}</td>
+          </tr>
+          {% for field, value, readable_name in object.get_iterable_readable_fields %}
+            <tr>
+              <th>{{ readable_name }}</th>
+              <td>{{ value|default:"(unknown)"|linebreaksbr }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </fieldset>
+    </div>
+    <div class="col-sm">
+      {% if object.documents.all %}
+        <fieldset><legend>
+          Documents
+          {% if object.required_documents_uploaded %}
+            <span class="badge badge-success">criterias are met</span>
+          {% else %}
+            <span class="badge badge-warning">need to upload more</span>
+          {% endif %}
+        </legend>
+          <form action="#" method="POST" onSubmit="return confirm('Are you sure?')">
+            {% csrf_token %}
+            <table class="table table-bordered">
+              <tr>
+                <th>Type</th>
+                <th>File and author</th>
+                <th></th>
+              </tr>
+              {% for doc in object.documents.all %}
+                <tr>
+                  <td>{{ doc.get_type_display }}</td>
+                  <td title="{{ doc.filename }}">
+                    <a href="{% url 'certificates:application-document-download' object.id doc.id %}">
+                      {{ doc.short_filename }}
+                    </a>
+                    <br/>
+                    {{ doc.created_by }}<br/>{{ doc.created_at }}</td>
+                  <td>
+                    {% if object.access_type == 'staff' or doc.created_by == user %}
+                      <button type="submit" name="delete-document" value="{{ doc.pk }}" class="btn-sm btn btn-danger">delete</button>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          </form>
+        </fieldset>
+      {% endif %}
+
+      <fieldset><legend>Document Upload</legend>
+        <form action="#" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ file_upload_form|crispy }}
+          <button type="submit" name="file_upload" class="btn btn-primary">Upload</button>
+        </form>
+        <br/>
+      </fieldset>
+
+
+      <fieldset><legend>History</legend>
+        <p>(recent history events to be listed here)</p>
+      </fieldset>
+
+      <fieldset><legend>Other objects</legend>
+        <p>(usage/returns/transfers/adjustments/etc)</p>
+      </fieldset>
+    </div>
+  </div>
+</div>
+{% endblock content %}

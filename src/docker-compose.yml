@@ -1,0 +1,94 @@
+version: '3.4'
+
+networks:
+  # intergov-apis-external:
+  #   external: true
+  internal:
+    driver: bridge
+
+x-services:
+  django: &django
+    networks:
+      # - intergov-apis-external
+      - internal
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - USE_DOCKER=yes
+      - IPYTHONDIR=/app/.ipython
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_FLOWER_USER=debug
+      - CELERY_FLOWER_PASSWORD=debug
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=chambers_app
+      - POSTGRES_USER=debug
+      - POSTGRES_PASSWORD=debug
+    env_file:
+      - ./local.env
+
+services:
+  django:
+    <<: *django
+    container_name: chambers-app-django
+    image: chambers_app_management_local_django
+    ports:
+      - "8010:8010"
+    command: /start
+    restart: on-failure
+
+  celeryworker:
+    <<: *django
+    container_name: chambers-app-celeryworker
+    image: chambers_app_management_local_celeryworker
+    command: /start-celeryworker
+    restart: on-failure
+
+  postgres:
+    networks:
+      - internal
+    image: postgres:10.5
+    volumes:
+      - ./var/postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=chambers_app
+      - POSTGRES_USER=debug
+      - POSTGRES_PASSWORD=debug
+    restart: on-failure
+    logging:
+      driver: none
+
+  redis:
+    networks:
+      - internal
+    image: redis:5.0-alpine
+    restart: on-failure
+    logging:
+      driver: none
+
+  # celerybeat:
+  #   <<: *django
+  #   image: chambers_app_management_local_celerybeat
+  #   depends_on:
+  #     - redis
+  #     - postgres
+
+  #   ports: []
+  #   command: /start-celerybeat
+
+  # flower:
+  #   <<: *django
+  #   image: chambers_app_management_local_flower
+  #   ports:
+  #     - "5555:5555"
+  #   command: /start-flower

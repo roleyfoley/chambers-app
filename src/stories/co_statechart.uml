@@ -1,0 +1,41 @@
+@startuml
+state fork_result <<fork>>
+
+[*] --> identified: register
+identified: id = {GUID}
+identified: source: Australia
+identified: destination: China
+identified: issuer: {Chamber of Commerce ID}
+identified: number: {local CO id}
+
+identified -> complete: attach
+complete: ...
+complete: pdf: {PDF}
+complete: json: {JSON}
+
+complete -> lodged: lodge
+lodged: ...
+lodged: lodgement: {datetime}
+
+lodged --> fork_result
+fork_result --> accepted
+accepted: ...
+accepted: acceptance: {datetime}
+
+fork_result --> rejected
+rejected: ...
+rejected: rejection: {datetime}
+rejected: reason: {user message}
+
+accepted --> [*]
+rejected --> [*]
+
+
+note left of fork_result
+   This is where the app interacts with the ledger.
+   Typically valid lodgements will not be rejected,
+   however there are reasons why the network might
+   refuse a message.
+end note
+
+@enduml

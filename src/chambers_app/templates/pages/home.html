@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="flex-container" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+
+  <div style="width: 30%; text-align: center; border: 1px solid gray; border-radius: 3px; margin: 10px">
+    <a href="{% url 'certificates:list' %}">
+      <br/>
+      <span class="oi oi-document" style="font-size: 2em"></span>
+      <h2>Certificates</h2>
+      <br/>
+    </a>
+  </div>
+  <div style="width: 30%; text-align: center; border: 1px solid gray; border-radius: 3px; margin: 10px">
+    <a href="{% url 'users:detail' request.user.username  %}">
+      <br/>
+      <span class="oi oi-signal" style="font-size: 2em"></span>
+      <h2>Settings</h2>
+      <br/>
+    </a>
+  </div>
+</div>
+{% endblock content %}

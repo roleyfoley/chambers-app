@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Application #{{ object.short_id }} approval{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2>Application #{{ object.short_id }} approval</h2>
+    <form action="#" method="POST" onSubmit="return confirm('Are you sure?')">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-sm">
+          <fieldset><legend>Approve</legend>
+            <a href="../" class="btn btn-secondary">Cancel</a>
+            <button type="submit" name="approve-application" class="btn btn-success">
+              Approve
+            </button>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          <fieldset><legend>Reject</legend>
+            Reason:
+            <select name='reject_reason' class='form-control'>
+              {% for r in reject_reasons %}
+                <option value="{{ r.id }}">{{ r }}</option>
+              {% endfor %}
+            </select>
+            <br/>
+            Comment:
+            <textarea name="reject_comment" class="form-control"></textarea>
+            <br/>
+            <a href="../" class="btn btn-secondary">Cancel</a>
+            <button type="submit" name="reject-application" class="btn btn-danger">
+              Reject
+            </button>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock content %}

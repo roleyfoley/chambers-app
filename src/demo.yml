@@ -1,0 +1,25 @@
+version: '3.4'
+
+# This file is different only by the intergov-apis-external network,
+# which assumed to be created by Intergov setup somewhere and used to
+# talk to intergov APIs. You don't need it for chambers app development,
+# or you could configure Intergov api endpoints in a different way
+# (cloud setup or so)
+
+networks:
+  intergov-apis-external:
+    external: true
+  internal:
+    driver: bridge
+
+
+services:
+  django:
+    networks:
+      - intergov-apis-external
+      - internal
+
+  celeryworker:
+    networks:
+      - intergov-apis-external
+      - internal

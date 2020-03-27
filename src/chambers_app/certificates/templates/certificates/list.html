@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load pagination_tags %}
+
+{% block title %}Certificates{% endblock %}
+
+{% block content %}
+<div class="container certificates">
+  <div class="certificates-header">
+    <div class="certificates-title">
+      Certificates of origin
+    </div>
+    <div class="float-right">
+      <a href="{% url 'certificates:create' %}" class="btn btn-primary btn-sm">+ Create</a>
+    </div>
+  </div>
+  <table class="table">
+    <tr>
+      <th>Internal ID</th>
+      <th>
+        Status
+        <img src="{% static 'images/sort.png' %}" width="10"/>
+      </th>
+      <th>
+        Org
+        <img src="{% static 'images/sort.png' %}" width="10"/>
+      </th>
+      <th>
+        Receiver
+        <img src="{% static 'images/sort.png' %}" width="10"/>
+      </th>
+      <th>
+        Documents
+        <img src="{% static 'images/sort.png' %}" width="10"/>
+      </th>
+      <th>
+        Created
+        <img src="{% static 'images/sort.png' %}" width="10"/>
+      </th>
+    </tr>
+    {% autopaginate object_list 10 %}
+    {% for cert in object_list %}
+      <tr>
+        <td>
+          <a href="{{ cert.get_absolute_url }}">
+            {{ cert.short_id }}
+          </a>
+        </td>
+        <td>
+          <div class="badge badge-pill badge-draft">
+            {{ cert.get_status_display }}
+          </div>
+        </td>
+        <td>
+          {{ cert.org }}
+        </td>
+        <td>
+          {{ cert.get_dst_country_display }}
+        </td>
+        <td>{{ cert.documents.count }}</td>
+        <td>
+          {{ cert.created_at }}<br/>
+          {{ cert.created_by }}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% paginate %}
+</div>
+{% endblock content %}

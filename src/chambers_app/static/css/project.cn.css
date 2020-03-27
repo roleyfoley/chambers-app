@@ -1,0 +1,25 @@
+:root {
+  --primary-color: #de2810;
+  --secondary-color: #f88e06;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+#login-section .primaryAction {
+  width: 100%;
+  background-color: var(--secondary-color);
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.certificates .page-link {
+  color: var(--secondary-color);
+}
+
+.certificates .page-item.active .page-link {
+  background-color: var(--secondary-color);
+}

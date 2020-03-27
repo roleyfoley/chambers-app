@@ -1,0 +1,7 @@
+.*
+media
+chambers_app/media
+var
+!.coveragerc
+!.env
+!.pylintrc

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Certificate Creation{% endblock %}
+
+{% block extra_head %}
+  <style>
+    textarea {
+      max-height: 100px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="container p-5 bg-white">
+  <h2 class="text-uppercase">Add new Certificate</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.errors }}
+{#    {{ form|crispy }}#}
+    <div class="row">
+      <div class="col-col-md-6 col-md-6">
+        {{ form.org|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.item_no|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.dst_country|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.packages_marks|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.exporter_info|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.goods_descr|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.producer_info|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.hs_code|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.transport_info|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.invoice_info|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.origin_criterion|as_crispy_field }}
+      </div>
+
+      <div class="col-col-md-6 col-md-6">
+        {{ form.remarks|as_crispy_field }}
+      </div>
+    </div>
+    <ul class="font-italic">
+      <li>
+        I am the authorised representative of the exporter.
+      </li>
+      <li>
+          The information in this document is true and accurate and I assume the
+          responsibility for proving such representations. I understand that I am
+          liable for any false statements or material omissions made on or in
+          connection with this document.
+      </li>
+      <li>
+          I agree to maintain, and present upon request, documentation necessary
+          to support this Certificate, and to inform, in writing, all persons to whom
+          the Certificate was given of any changes that would affect the accuracy
+          or validity of this Certificate.
+      </li>
+      <li>
+          The goods originate in the territory of
+          one or both of the Parties and comply with the origin requirements
+          specified for those goods in the related free trade agreement.
+      </li>
+    </ul>
+
+    <div class="mt-5">
+      <button type="submit" class="btn btn-primary">Create</button>
+      <a class="btn btn-default ml-3" href="../">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock content %}

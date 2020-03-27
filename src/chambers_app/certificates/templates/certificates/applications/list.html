@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Certificate Applications{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="float-right">
+    <a href="{% url 'certificates:application-create' %}" class="btn btn-primary">Create</a>
+  </div>
+
+  <h2>Certificate Applications ({{ object_list.count }})</h2>
+  <form method="get">
+    <div class="btn-group" role="group">
+      <button type="submit" name="show" value="all" class="btn btn-secondary">All</button>
+      <button type="submit" name="show" value="a" class="btn btn-{% if filters.show == 'a' %}primary{% else %}secondary{% endif %}">Approved</button>
+      <button type="submit" name="show" value="r" class="btn btn-{% if filters.show == 'r' %}primary{% else %}secondary{% endif %}">Rejected</button>
+      <button type="submit" name="show" value="p" class="btn btn-{% if filters.show == 'p' %}primary{% else %}secondary{% endif %}">Pending</button>
+    </div>
+  </form>
+  <table class="table table-bordered">
+    <tr>
+      <th>#</th>
+      <th>Status</th>
+      <th>Org</th>
+      <th>Country</th>
+      <th>Created at</th>
+      <th>Created by</th>
+      <th>Certificate</th>
+    </tr>
+    {% for certappl in object_list %}
+      <tr>
+        <td>
+          <a href="{{ certappl.get_absolute_url }}">
+            {{ certappl.pk }}
+          </a>
+        </td>
+        <td>{{ certappl.get_status_display }}</td>
+        <td>
+          {{ certappl.org }}
+        </td>
+        <td>
+          {{ certappl.dst_country }}
+        </td>
+        <td>
+          {{ certappl.created_at }}
+        </td>
+        <td>
+          {{ certappl.created_by }}
+        </td>
+        <td>
+          {% if certappl.certificate_created %}
+            <a href="{{ certappl.certificate_created.get_absolute_url }}">View certificate</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock content %}

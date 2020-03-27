@@ -1,0 +1,23 @@
+@startuml
+actor Staff as "Chamber"
+participant home
+participant new_co_form as "New CO\nform"
+participant co_detail_page as "CO detail\npage"
+
+title Create CO with Exporter Web Site
+
+== login ==
+Staff -> home: login (as issuer)
+
+== create CO ==
+Staff -> new_co_form: submit\n{source, destination, number}\n{pdf, structured data}
+Staff <-- new_co_form: CO page URL
+Staff -> co_detail_page: view
+Staff <-- co_detail_page: (status: lodged)
+
+== some time later ==
+Staff -> co_detail_page: view
+Staff <-- co_detail_page: (status: accepted)
+
+
+@enduml

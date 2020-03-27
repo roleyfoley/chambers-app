@@ -1,0 +1,38 @@
+@startuml
+actor Staff as "Chamber"
+participant colist as "/certificatesOfOrigin "
+participant co as "/certificatesOfOrigin/{ID} "
+participant copdf as "/certificatesOfOrigin/{ID}/pdfDoc "
+participant cojson as "/certificatesOfOrigin/{ID}/jsonDoc "
+
+title Create CO with exporter_ap API
+
+== register ==
+Staff -> colist: POST {CO identifiers}
+Staff <-- colist: identifier={ID}
+Staff -> co: GET
+Staff <-- co: status=identified
+
+== attach ==
+Staff -> cojson: POST {JSON}
+Staff <-- cojson: status=complete
+Staff -> cojson: PUT {JSON}
+Staff <-- cojson: status=complete
+Staff -> copdf: POST {PDF}
+Staff <-- copdf: status=complete
+Staff -> copdf: PUT {PDF}
+Staff <-- copdf: status=complete
+
+== lodge ==
+Staff -> co: GET
+Staff <-- co: status=complete
+Staff -> co: PATCH {status=lodged}
+Staff <-- co: status=lodged
+Staff -> co: GET
+Staff <-- co: status=lodged
+
+== some time later ==
+Staff -> co: GET
+Staff <-- co: status=accepted
+
+@enduml

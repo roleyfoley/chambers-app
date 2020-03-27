@@ -1,0 +1,111 @@
+{% load static i18n %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>[{{ ICL_CHAMBERS_APP_COUNTRY }}] {% block title %}Index{% endblock title %} &ndash; Chambers App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="chambers_apps system">
+    <meta name="author" content="GoSource">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <link rel="icon" href="{% static 'favicon.png' %}">
+
+    {% block css %}
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" integrity="sha256-BJ/G+e+y7bQdrYkS2RBTyNfBHpA9IuGaPmf9htub5MQ=" crossorigin="anonymous" />
+      <link href="{% static 'css/project.css' %}" rel="stylesheet">
+      <link href="{% static CSS_COUNTRY_THEME %}" rel="stylesheet">
+    {% endblock %}
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body>
+    <div class="mb-1">
+      <nav class="top-header navbar navbar-expand-md navbar-light bg-light">
+        <div class="align-items-center">
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" width=25 />
+            <span>Chambers</span>App
+          </a>
+
+          {% if request.user.is_authenticated %}
+            <a class="nav-link" href="{% url 'account_logout' %}">
+              <img class="mr-3" src="{% static 'images/avatar.png' %}" alt="" style="width: 50px; height: 50px; border-radius: 50%">
+              {% trans "Sign Out" %} ({{ user.username }})
+            </a>
+          {% else %}
+            <a id="log-in-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+          {% endif %}
+        </div>
+      </nav>
+      <div class="banner navbar navbar-expand-lg">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'certificates:list' %}">Certificates of Origin</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">Settings</a>
+              </li>
+
+              {% if request.user.is_staff %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
+                </li>
+              {% endif %}
+          </ul>
+          </div>
+          {% else %}
+            <div class="login-msg">
+              Please login or register to continue
+            </div>
+          {% endif %}
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="ml-3">&times;</span></button>
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <br/>
+      {% block content %}
+        <p>Use this document as a way to quick start any new project.</p>
+      {% endblock content %}
+    </div> <!-- /container -->
+
+    <br/><br/><br/><br/>
+
+    {% block modal %}{% endblock modal %}
+
+    {% block javascript %}
+      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+      <script src="{% static 'js/project.js' %}"></script>
+    {% endblock javascript %}
+  </body>
+  <footer>
+    Copyright © 2019 <a href="#">ChamberApp</a>. All rights reserved.
+  </footer>
+</html>
+

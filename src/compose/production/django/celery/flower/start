@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+CELERY_FLOWER_USER="${CELERY_FLOWER_USER:-"admin"}"
+CELERY_FLOWER_PASSWORD_ENCRYPTED="${CELERY_FLOWER_PASSWORD_ENCRYPTED:-"false"}"
+
+ if [[ "${CELERY_FLOWER_PASSWORD_ENCRYPTED}" == "true" ]]; then
+     echo "${CELERY_FLOWER_PASSWORD#"base64:"}" | base64 -d > "/tmp/cipher.blob"
+     CELERY_FLOWER_PASSWORD="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "fileb:///tmp/cipher.blob" --output text --query Plaintext | base64 -d )"
+
+     if [[ -z "${CELERY_FLOWER_PASSWORD}" ]]; then
+         echo "Celery Password was supposed to be encrypted but we couldn't decrypt it"
+         exit 255
+     fi
+ fi
+
+export FLOWER_BASIC_AUTH="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}"
+
+celery flower \
+    --app=chambers_app.taskapp \
+    --broker="${CELERY_BROKER_URL}" \
+    --basic_auth="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}"
