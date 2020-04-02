@@ -169,6 +169,9 @@ if STATSD_HOST:
     STATSD_PREFIX = env('MON_STATSD_PREFIX', default='chambersapp')
     STATSD_PORT = int(env('MON_STATSD_PORT', default=8125))
 
+BUILD_REFERENCE = env('BUILD_REFERENCE', default=None)
+CONFIGURATION_REFERENCE = env('CONFIGURATION_REFERENCE', default=None)
+APP_REFERENCE = env('APP_REFERENCE', default=None)
 
 from .base_app import *  # NOQA
 from .base_apis import *  # NOQA

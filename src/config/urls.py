@@ -5,7 +5,8 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
-from django.http import HttpResponse
+
+from .healthcheck import HealthcheckView
 
 urlpatterns = [
     path("", login_required(
@@ -26,7 +27,7 @@ urlpatterns = [
 
     path("users/", include("chambers_app.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path("healthcheck", lambda r: HttpResponse()),
+    path("healthcheck", HealthcheckView.as_view()),
     path("websub/", include("chambers_app.websub_receiver.urls", namespace="websub")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
