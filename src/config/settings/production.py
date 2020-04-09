@@ -28,6 +28,14 @@ try:
 except requests.exceptions.RequestException:
     pass
 
+# AWS Fargate containers use a different metadata service
+if not EC2_PRIVATE_IP and env('ECS_CONTAINER_METADATA_URI'):
+    try:
+        CONTAINER_METADATA = requests.get(env('ECS_CONTAINER_METADATA_URI')).json()
+        ALLOWED_HOSTS.extend(CONTAINER_METADATA['Networks'][0]['IPv4Addresses'])
+    except requests.exceptions.RequestException:
+        pass
+
 if EC2_PRIVATE_IP:
     ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
 
