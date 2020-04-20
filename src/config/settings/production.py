@@ -137,8 +137,7 @@ TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
 ]
 
 # EMAIL
-# ------------------------------------------------------------------------------# https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
+# ------------------------------------------------------------------------------
 EMAIL_SUBJECT_PREFIX = env(
     "DJANGO_EMAIL_SUBJECT_PREFIX", default="[Chambers App]"
 )

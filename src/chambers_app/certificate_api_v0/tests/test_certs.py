@@ -13,9 +13,10 @@ from chambers_app.users.tests.factories import UserFactory
 pytestmark = pytest.mark.django_db(transaction=True)
 
 
-@mock.patch('intergov_client.IntergovClient.post_text_document')
-@mock.patch('intergov_client.IntergovClient.post_message')
-def test_integration_workflow(mock_post_message, mock_post_document):
+@mock.patch('chambers_app.certificates.tasks.IntergovClient.post_binary_document')
+@mock.patch('chambers_app.certificates.tasks.IntergovClient.post_text_document')
+@mock.patch('chambers_app.certificates.tasks.IntergovClient.post_message')
+def test_integration_workflow(mock_post_message, mock_post_document, mock_post_binary):
     """
     Primitive but correct integration test, which creates certificate, uploads
     some dumb documents and marks it as "lodged".
@@ -26,6 +27,7 @@ def test_integration_workflow(mock_post_message, mock_post_document):
     lodging anymore).
     """
     mock_post_document.return_value = {"multihash": "QmNTWr4pXQcFd49PwgLBAPGjaedLkLXQU1c2EqfKV3K8RJ"}
+    mock_post_binary.return_value = {"multihash": "QmNTWr4pXQcFd49PwgLBAPGjaedLkLXQU1c2EqfKV3K8RJ"}
 
     u1 = UserFactory()
     org = OrgFactory()
