@@ -30,7 +30,7 @@ pipeline {
             description: 'The commit to use for the testing build'
         )
         booleanParam(
-            name: 'all_tests',
+            name: 'run_tests',
             defaultValue: false,
             description: 'Run tests for all components'
         )
@@ -38,22 +38,27 @@ pipeline {
 
     stages {
         // intergov required for running full test suite
+        stage('Setup') {
+            steps {
+                dir("${env.DOCKER_BUILD_DIR}/test/chambers_app") {
+                    checkout scm
+                }
+            }
+        }
+
         stage('Testing') {
 
             when {
                 anyOf {
+                    branch 'master'
                     changeRequest()
-                    equals expected: true, actual: params.all_tests
+                    equals expected: true, actual: params.run_tests
                 }
             }
 
 
             stages {
                 stage('Setup intergov') {
-                    when {
-                        changeRequest()
-                    }
-
                     steps {
                         dir("${env.DOCKER_BUILD_DIR}/test/intergov/") {
                             checkout(
@@ -77,10 +82,6 @@ pipeline {
 
                 stage('Setup Chambers') {
                     steps {
-                        dir("${env.DOCKER_BUILD_DIR}/test/chambers_app") {
-                            checkout scm
-                        }
-
                         dir("${env.DOCKER_BUILD_DIR}/test/chambers_app/src/") {
                             sh '''#!/bin/bash
                             touch local.env
@@ -152,6 +153,16 @@ pipeline {
     }
 
     post {
+        success {
+            script {
+                if (env.BRANCH_NAME == 'master') {
+                    build job: '../cotp-devnet/build/master', parameters: [
+                        string(name: 'branchref_chambersapp', value: "${GIT_COMMIT}")
+                    ]
+                }
+            }
+        }
+
         cleanup {
             cleanWs()
         }
