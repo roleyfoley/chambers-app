@@ -19,6 +19,12 @@ USE_TZ = True
 DATABASES = {"default": env.db("DATABASE_URL", default="")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
+DB_SCHEMA = env("POSTGRES_DB_SCHEMA", default=None)
+if DB_SCHEMA:
+    # allow multiple clients to use the same database, for demo and local envs only
+    DATABASES["default"]["OPTIONS"] = DATABASES["default"].get("OPTIONS", {})
+    DATABASES["default"]["OPTIONS"]['options'] = f'-c search_path={DB_SCHEMA}'
+
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 
