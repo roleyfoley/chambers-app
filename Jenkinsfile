@@ -41,7 +41,10 @@ pipeline {
         stage('Setup') {
             steps {
                 dir("${env.DOCKER_BUILD_DIR}/test/chambers_app") {
-                    checkout scm
+                    script {
+                        def repoChambersApp = checkout scm
+                        env["GIT_COMMIT"] = repoChambersApp.GIT_COMMIT
+                    }
                 }
             }
         }
@@ -156,7 +159,7 @@ pipeline {
         success {
             script {
                 if (env.BRANCH_NAME == 'master') {
-                    build job: '../cotp-devnet/build/master', parameters: [
+                    build job: '../cotp-devnet/build-clients/master', parameters: [
                         string(name: 'branchref_chambersapp', value: "${GIT_COMMIT}")
                     ]
                 }
