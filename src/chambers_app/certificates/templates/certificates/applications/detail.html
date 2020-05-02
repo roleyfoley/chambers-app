@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container">
   <h2>Application #{{ object.short_id }}</h2>
-  <p>Details about the certificate application object {{ object.pk }} for the {{ object.org }}.</p>
+  <p>Details about the certificate application object {{ object.pk }}.</p>
   <p>Viewing as {{ object.access_type }}</p>
   <div class="row">
     <div class="col-sm">
@@ -37,10 +37,6 @@
           <tr>
             <th>Sent at</th>
             <td>{{ object.created_at }}</td>
-          </tr>
-          <tr>
-            <th>For org</th>
-            <td>{{ object.org }}</td>
           </tr>
           {% for field, value, readable_name in object.get_iterable_readable_fields %}
             <tr>

@@ -23,10 +23,7 @@ class CertificateQuerysetMixin(object):
         if user.is_superuser:
             # no further checks for the superuser
             return qs
-        my_orgs = user.chambersofcommerce.all()
         return qs.filter(
-            org__in=my_orgs
-        ) | qs.filter(
             created_by=user
         )
 

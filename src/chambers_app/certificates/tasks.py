@@ -70,8 +70,8 @@ def send_certificate(certificate_id=None):
 
         'id': str(c.id),
         'dst_country': str(c.dst_country),
-        'org.name': c.org.name,
-        'org.id': str(c.org.id),
+        'org.name': settings.CHAMBERS_ORG_NAME,
+        'org.id': settings.CHAMBERS_ORG_ID,
         'body': {
             'exporter_info': c.exporter_info,
             'producer_info': c.producer_info,
@@ -122,7 +122,7 @@ def send_certificate(certificate_id=None):
         "receiver": str(c.dst_country),
         "subject": "{}.{}.{}".format(
             settings.ICL_CHAMBERS_APP_COUNTRY.upper(),
-            c.org.id,
+            settings.CHAMBERS_ORG_ID.replace('.', '-'),
             c.id
         ),
         "obj": object_info['multihash'],

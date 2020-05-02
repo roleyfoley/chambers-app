@@ -12,7 +12,7 @@ class RecipientCountryAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    list_display = ('created_at', 'org', 'dst_country', 'status')
+    list_display = ('created_at', 'dst_country', 'status')
     list_filter = ('status',)
 
 

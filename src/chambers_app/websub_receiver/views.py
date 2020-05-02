@@ -1,6 +1,7 @@
 import json
 import logging
 
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
@@ -91,9 +92,15 @@ class MsgNotificationReceiveView(BaseNotificationReceiveView):
         """
         # TODO: validate the previous status is `accepted` or `sent`
         country, org_id, cert_id = message['subject'].split('.')
+        if org_id != settings.CHAMBERS_ORG_ID:
+            logger.warning(
+                "Received and parsing a websub event about certificate for org "
+                "%s while our org is %s",
+                org_id,
+                settings.CHAMBERS_ORG_ID
+            )
         cert = Certificate.objects.get(
             id=cert_id,
-            org_id=org_id,
         )
         cert.acquitted_at = timezone.now()
         if message not in cert.acquitted_details:
@@ -121,9 +128,15 @@ class CertStatusNotificationView(BaseNotificationReceiveView):
     def _process_notification(self, event):
         # TODO: validate the previous status is `sent` or equal to the new one
         country, org_id, cert_id = event['subject'].split('.')
+        if org_id != settings.CHAMBERS_ORG_ID:
+            logger.warning(
+                "Received and parsing a websub event about certificate for org "
+                "%s while our org is %s",
+                org_id,
+                settings.CHAMBERS_ORG_ID
+            )
         cert = Certificate.objects.get(
             id=cert_id,
-            org_id=org_id,
         )
 
         if event['predicate'].upper() == "message.status.change".upper():

@@ -23,10 +23,6 @@
         <img src="{% static 'images/sort.png' %}" width="10"/>
       </th>
       <th>
-        Org
-        <img src="{% static 'images/sort.png' %}" width="10"/>
-      </th>
-      <th>
         Receiver
         <img src="{% static 'images/sort.png' %}" width="10"/>
       </th>
@@ -51,9 +47,6 @@
           <div class="badge badge-pill badge-draft">
             {{ cert.get_status_display }}
           </div>
-        </td>
-        <td>
-          {{ cert.org }}
         </td>
         <td>
           {{ cert.get_dst_country_display }}

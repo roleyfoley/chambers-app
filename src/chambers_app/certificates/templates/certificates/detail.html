@@ -62,10 +62,6 @@
             <th>Created at</th>
             <td>{{ object.created_at }}</td>
           </tr>
-          <tr>
-            <th>For org</th>
-            <td>{{ object.org }}</td>
-          </tr>
           {% for field, value, readable_name in object.get_iterable_readable_fields %}
             {% if value %}
               <tr>

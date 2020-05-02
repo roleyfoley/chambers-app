@@ -37,7 +37,6 @@ Certificates rendered to short format.
             {
                 "id": "56c6aa43-21a4-4bc8-99d2-5a98c6bb5465",
                 "status": "draft",
-                "org": "0fefcaed-745c-4bf9-b0d0-1846c6b3c091",
                 "created_at": "2019-05-09T16:18:03.435189+10:00",
                 "dst_country": "CN"
             },
@@ -45,7 +44,6 @@ Certificates rendered to short format.
             {
                 "id": "080e35ad-9139-4fe6-9380-2b02a328b58e",
                 "status": "lodged",
-                "org": "0fefcaed-745c-4bf9-b0d0-1846c6b3c091",
                 "created_at": "2019-05-07T18:13:50.265059+10:00",
                 "dst_country": "AG"
             }
@@ -68,7 +66,6 @@ Retrieve complete certificate info. Checks if given certificate is visible to th
     {
         "id": "080e35ad-9139-4fe6-9380-2b02a328b58e",
         "status": "lodged",
-        "org": "0fefcaed-745c-4bf9-b0d0-1846c6b3c091",
         "created_at": "2019-05-07T18:13:50.265059+10:00",
         "dst_country": "AG",
         "exporter_info": "",
@@ -118,7 +115,6 @@ returned for this request, is used for referencing it in the future.
         -H "Accept: application/json; indent=2" \
         -d '{
             "id": "080e35ad-9139-4fe6-9380-2b02a328b58e",
-            "org": "0fefcaed-745c-4bf9-b0d0-1846c6b3c091",
             "created_at": "2019-05-07T18:13:50.265059+10:00",
             "dst_country": "AG",
             "exporter_info": "value",
@@ -140,7 +136,7 @@ returned for this request, is used for referencing it in the future.
 
 Contains short created certificate representation, exactly like in "Certificates list" endpoint.
 
-Possible errors are: unable to find related object (org), lack of required fields (dst_country),
+Possible errors are: unable to find related object, lack of required fields (dst_country),
 auth problems.
 
 
@@ -161,7 +157,6 @@ Request: JSON with fields which have to be updated. Response - full object repre
         -H "Accept: application/json; indent=2" \
         -d '{
             "status": "complete",
-            "org": "0fefcaed-745c-4bf9-b0d0-1846c6b3c091",
             "created_at": "2019-05-07T18:13:50.265059+10:00",
             "dst_country": "AG",
             "exporter_info": "value",

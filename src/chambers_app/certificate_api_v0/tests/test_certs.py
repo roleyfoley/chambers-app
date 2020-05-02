@@ -1,13 +1,13 @@
 from unittest import mock
 
 import pytest
+from django.conf import settings
 from django.test.client import encode_multipart
 from requests.auth import HTTPBasicAuth
 from rest_framework.test import RequestsClient, APIRequestFactory
 
 from chambers_app.certificates.models import Certificate, CertificateDocument
 from chambers_app.certificate_api_v0.views import DocumentUploadView
-from chambers_app.organisations.factories import OrgFactory
 from chambers_app.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db(transaction=True)
@@ -30,13 +30,12 @@ def test_integration_workflow(mock_post_message, mock_post_document, mock_post_b
     mock_post_binary.return_value = {"multihash": "QmNTWr4pXQcFd49PwgLBAPGjaedLkLXQU1c2EqfKV3K8RJ"}
 
     u1 = UserFactory()
-    org = OrgFactory()
 
     c = RequestsClient()
     c.auth = HTTPBasicAuth(u1.username, 'password')
 
     message_body = {
-        "org": str(org.pk),
+        "org": settings.CHAMBERS_ORG_ID,
         "dst_country": "CN",
         "exporter_info": "value",
         "producer_info": "value 02",
@@ -56,7 +55,6 @@ def test_integration_workflow(mock_post_message, mock_post_document, mock_post_b
     cert_id = resp.json().get('id')
 
     cert = Certificate.objects.get(
-        org=org,
         pk=cert_id
     )
 

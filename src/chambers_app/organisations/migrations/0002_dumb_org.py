@@ -3,20 +3,20 @@
 from django.db import migrations
 
 
-def create_dumb_orgs(apps, schema_editor):
-    '''
-    We can't import the Post model directly as it may be a newer
-    version than this migration expects. We use the historical version.
-    '''
-    ChamberOfCommerce = apps.get_model('organisations', 'ChamberOfCommerce')
-    ChamberOfCommerce.objects.create(
-        name='First Chamber',
-        descr='Automatically created on app init'
-    )
-    ChamberOfCommerce.objects.create(
-        name='CustomChamber01',
-        descr='Automatically created on app init'
-    )
+# def create_dumb_orgs(apps, schema_editor):
+#     '''
+#     We can't import the Post model directly as it may be a newer
+#     version than this migration expects. We use the historical version.
+#     '''
+#     ChamberOfCommerce = apps.get_model('organisations', 'ChamberOfCommerce')
+#     ChamberOfCommerce.objects.create(
+#         name='First Chamber',
+#         descr='Automatically created on app init'
+#     )
+#     ChamberOfCommerce.objects.create(
+#         name='CustomChamber01',
+#         descr='Automatically created on app init'
+#     )
 
 
 class Migration(migrations.Migration):
@@ -26,5 +26,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(create_dumb_orgs, migrations.RunPython.noop),
+        # migrations.RunPython(create_dumb_orgs, migrations.RunPython.noop),
     ]

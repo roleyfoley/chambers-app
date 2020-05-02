@@ -56,7 +56,7 @@ class Certificate(models.Model):
     )
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    org = models.ForeignKey('organisations.ChamberOfCommerce', models.CASCADE)
+    # org = models.ForeignKey('organisations.ChamberOfCommerce', models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
 
@@ -121,7 +121,7 @@ class Certificate(models.Model):
 
     def __str__(self):
         status = self.get_status_display()
-        return f"{status} certificate {self.short_id} for {self.org}"
+        return f"{status} certificate {self.short_id}"
 
     @statsd_timer("model.Certificate.save")
     def save(self, *args, **kwargs):

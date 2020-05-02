@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from chambers_app.certificates.models import Certificate, CertificateDocument
-from chambers_app.organisations.models import ChamberOfCommerce
+# from chambers_app.organisations.models import ChamberOfCommerce
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class DocumentSerializer(serializers.ModelSerializer):
 class CertShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
-        fields = ('id', 'status', 'org', 'created_at', 'dst_country')
+        fields = ('id', 'status', 'created_at', 'dst_country')
 
 
 class CertFullSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class CertFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
         fields = (
-            'id', 'status', 'org', 'created_at', 'dst_country',
+            'id', 'status', 'created_at', 'dst_country',
             # business data
             'exporter_info', 'producer_info', 'importer_info', 'transport_info',
             'remarks', 'item_no', 'packages_marks', 'goods_descr',
@@ -48,22 +48,22 @@ class CertFullSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     "Can't update object - update is available only for draft or complete status"
                 )
-        if 'org' in data:
-            if self.user not in data['org'].users.all():
-                # we mimic ObjectNotFound exception
-                org_pk = data['org'].pk
-                raise serializers.ValidationError(
-                    f'Invalid pk "{org_pk}" - object does not exist.'
-                )
+        # if 'org' in data:
+        #     if self.user not in data['org'].users.all():
+        #         # we mimic ObjectNotFound exception
+        #         org_pk = data['org'].pk
+        #         raise serializers.ValidationError(
+        #             f'Invalid pk "{org_pk}" - object does not exist.'
+        #         )
         return data
 
     def create(self):
         assert self.user
         kwargs = self.data.copy()
-        kwargs['org'] = ChamberOfCommerce.objects.get(
-            pk=kwargs['org'],
-            users__in=[self.user]
-        )
+        # kwargs['org'] = ChamberOfCommerce.objects.get(
+        #     pk=kwargs['org'],
+        #     users__in=[self.user]
+        # )
         new_obj = Certificate.objects.create(
             created_by=self.user,
             **kwargs
