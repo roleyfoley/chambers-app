@@ -1,5 +1,7 @@
 from .base_env import env
 
+AUTH_USER_MODEL = "users.User"
+
 # Django
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",

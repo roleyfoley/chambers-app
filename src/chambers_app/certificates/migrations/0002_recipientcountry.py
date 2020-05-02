@@ -24,7 +24,7 @@ def create_initial_recipients(apps, schema_editor):
         RecipientCountry(country='NZ', agreement_name='AANZFTA First Protocol'),
         RecipientCountry(country='PH', agreement_name='AANZFTA First Protocol'),
         RecipientCountry(country='SG', agreement_name='AANZFTA First Protocol'),
-        # Note: Thailang twice
+        # Note: Thailand twice
         RecipientCountry(country='TH', agreement_name='AANZFTA First Protocol'),
         RecipientCountry(country='VN', agreement_name='AANZFTA First Protocol'),
     ])
@@ -33,21 +33,9 @@ def create_initial_recipients(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('certificates', '0003_auto_20190604_1834'),
+        ('certificates', '0001_initial'),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='RecipientCountry',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('country', django_countries.fields.CountryField(max_length=2)),
-                ('agreement_name', models.CharField(blank=True, default='', max_length=256)),
-            ],
-            options={
-                'verbose_name_plural': 'recipient countries',
-                'ordering': ('country',),
-            },
-        ),
         migrations.RunPython(create_initial_recipients, migrations.RunPython.noop),
     ]

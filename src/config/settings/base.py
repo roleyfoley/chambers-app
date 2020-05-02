@@ -53,7 +53,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "chambers_app",
     "chambers_app.users.apps.UsersAppConfig",
-    "chambers_app.organisations",
     "chambers_app.certificates",
     "chambers_app.certificate_api_v0",
     "chambers_app.websub_receiver.apps.WebSubReceiverAppConfig",
