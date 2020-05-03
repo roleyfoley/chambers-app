@@ -7,7 +7,7 @@ CELERY_FLOWER_USER="${CELERY_FLOWER_USER:-"admin"}"
 CELERY_FLOWER_PASSWORD_ENCRYPTED="${CELERY_FLOWER_PASSWORD_ENCRYPTED:-"false"}"
 
  if [[ "${CELERY_FLOWER_PASSWORD_ENCRYPTED}" == "true" ]]; then
-     echo "${CELERY_FLOWER_PASSWORD#"base64:"}" | base64 -d > "/tmp/cipher.blob"
+     echo "${CELERY_FLOWER_PASSWORD#"kms+base64:"}" | base64 -d > "/tmp/cipher.blob"
      CELERY_FLOWER_PASSWORD="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "fileb:///tmp/cipher.blob" --output text --query Plaintext | base64 -d )"
 
      if [[ -z "${CELERY_FLOWER_PASSWORD}" ]]; then

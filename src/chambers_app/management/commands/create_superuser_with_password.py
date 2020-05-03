@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = (
         'Creates new superuser with password provided without any interactive '
         'input. Resets the password for existing user. Password may be either '
-        'cleartext value or KMS-encrypted BASE64 stuff'
+        'cleartext value or KMS-encrypted BASE64 secret'
     )
 
     def add_arguments(self, parser):
