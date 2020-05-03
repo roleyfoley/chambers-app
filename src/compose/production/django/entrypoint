@@ -6,11 +6,12 @@ set -o nounset
 
 # N.B. If only .env files supported variable expansion...
 export CELERY_BROKER_URL="${REDIS_URL}"
+KMS_PREFIX="${KMS_PREFIX:-"kms+base64:"}"
 
 # Decrypt AWS kms encrypted password
 if [ -n "${DATABASE_URL-}" ] && [ -n "${AWS_REGION-}" ]; then
 
-    echo ${DATABASE_PASSWORD#"kms+base64:"}| base64 -d > "/tmp/cipher.blob"
+    echo "${DATABASE_PASSWORD#${KMS_PREFIX}}"| base64 -d > "/tmp/cipher.blob"
     DATABASE_PASSWORD="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "fileb:///tmp/cipher.blob" --output text --query Plaintext | base64 -d || exit $?)"
 
     export POSTGRES_PASSWORD="${DATABASE_PASSWORD}"
